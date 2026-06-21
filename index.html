@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 Mutlu Player - HD Film İzle</title>
+    <meta name="referrer" content="no-referrer">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.92);
+            backdrop-filter: blur(20px);
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .navbar .logo {
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #e50914, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .navbar .logo i {
+            -webkit-text-fill-color: #e50914;
+            margin-right: 8px;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .menu-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-btn:hover {
+            background: rgba(229, 9, 20, 0.2);
+            border-color: #e50914;
+            transform: scale(1.05);
+        }
+
+        .menu-btn i {
+            font-size: 18px;
+        }
+
+        .film-count {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #aaa;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .film-count span {
+            color: #fff;
+            font-weight: 700;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 320px;
+            height: 100%;
+            background: rgba(15, 15, 15, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 30px 0;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 0 25px 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .sidebar-header h2 i {
+            color: #e50914;
+            margin-right: 10px;
+        }
+
+        .close-sidebar {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 28px;
+            cursor: pointer;
+            transition: 0.3s;
+            padding: 5px;
+        }
+
+        .close-sidebar:hover {
+            color: #fff;
+            transform: rotate(90deg);
+        }
+
+        .sidebar-categories {
+            padding: 20px 15px;
+        }
+
+        .sidebar-category {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 18px;
+            margin: 4px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #888;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .sidebar-category:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            transform: translateX(5px);
+        }
+
+        .sidebar-category.active {
+            background: rgba(229, 9, 20, 0.15);
+            color: #e50914;
+            border-left: 3px solid #e50914;
+        }
+
+        .sidebar-category i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar-category .badge {
+            margin-left: auto;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* ===== OVERLAY ===== */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1999;
+            display: none;
+            backdrop-filter: blur(4px);
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            margin-top: 80px;
+            padding: 30px 40px 60px;
+            transition: all 0.3s ease;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(229, 9, 20, 0.1), rgba(229, 9, 20, 0.02));
+            border-radius: 24px;
+            padding: 40px 50px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(229, 9, 20, 0.1), transparent);
+            border-radius: 50%;
+        }
+
+        .hero-section h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .hero-section h1 i {
+            color: #e50914;
+            margin-right: 12px;
+        }
+
+        .hero-section p {
+            color: #888;
+            font-size: 16px;
+            position: relative;
+        }
+
+        .hero-section .stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .hero-section .stats div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .hero-section .stats div i {
+            color: #e50914;
+            font-size: 20px;
+        }
+
+        .hero-section .stats div span {
+            color: #fff;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .category-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .category-title i {
+            color: #e50914;
+        }
+
+        /* ===== MOVIE GRID ===== */
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 28px;
+        }
+
+        .movie-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            border-color: rgba(229, 9, 20, 0.3);
+            box-shadow: 0 20px 60px rgba(229, 9, 20, 0.15);
+        }
+
+        .movie-card .poster-wrapper {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 2/3;
+            background: #111;
+        }
+
+        .movie-card .poster-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+
+        .movie-card:hover .poster-wrapper img {
+            transform: scale(1.08);
+            filter: brightness(0.6);
+        }
+
+        .movie-card .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 70px;
+            height: 70px;
+            background: rgba(229, 9, 20, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 40px rgba(229, 9, 20, 0.4);
+        }
+
+        .movie-card:hover .play-overlay {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .movie-card .play-overlay i {
+            margin-left: 4px;
+        }
+
+        .movie-card .movie-info {
+            padding: 16px 18px 18px;
+        }
+
+        .movie-card .movie-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 4px;
+        }
+
+        .movie-card .movie-category {
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .movie-card .movie-category i {
+            font-size: 10px;
+            color: #e50914;
+        }
+
+        .movie-card .movie-rating {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        /* ===== LOADING ===== */
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 20px;
+            color: #666;
+        }
+
+        .loading-state .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.05);
+            border-top-color: #e50914;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(20px);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            border-radius: 24px;
+            max-width: 1000px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: rgba(229, 9, 20, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            display: flex;
+            padding: 40px;
+            gap: 35px;
+        }
+
+        .modal-poster {
+            width: 240px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            flex-shrink: 0;
+        }
+
+        .modal-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .modal-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .modal-category {
+            font-size: 14px;
+            color: #e50914;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-desc {
+            font-size: 15px;
+            color: #aaa;
+            line-height: 1.7;
+            margin-bottom: 25px;
+            max-height: 120px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .modal-desc::-webkit-scrollbar {
+            width: 4px;
+        }
+        .modal-desc::-webkit-scrollbar-thumb {
+            background: #e50914;
+            border-radius: 2px;
+        }
+
+        .btn-play {
+            background: linear-gradient(135deg, #e50914, #b20710);
+            color: #fff;
+            border: none;
+            padding: 16px 36px;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            align-self: flex-start;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 8px 30px rgba(229, 9, 20, 0.3);
+        }
+
+        .btn-play:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 40px rgba(229, 9, 20, 0.5);
+        }
+
+        .btn-play i {
+            font-size: 20px;
+        }
+
+        .player-wrapper {
+            display: none;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+
+        .player-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e50914;
+            border-radius: 3px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 12px 20px;
+            }
+            .navbar .logo {
+                font-size: 20px;
+            }
+            .film-count {
+                display: none;
+            }
+            .main-content {
+                padding: 20px 16px 40px;
+                margin-top: 72px;
+            }
+            .hero-section {
+                padding: 25px 20px;
+            }
+            .hero-section h1 {
+                font-size: 24px;
+            }
+            .hero-section .stats {
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+            .movie-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 16px;
+            }
+            .sidebar {
+                width: 280px;
+                left: -280px;
+            }
+            .modal-body {
+                flex-direction: column;
+                align-items: center;
+                padding: 24px;
+                text-align: center;
+            }
+            .modal-poster {
+                width: 180px;
+            }
+            .modal-title {
+                font-size: 24px;
+            }
+            .btn-play {
+                align-self: center;
+                padding: 14px 28px;
+                font-size: 15px;
+            }
+            .modal {
+                padding: 16px;
+            }
+            .menu-btn span {
+                display: none;
+            }
+            .menu-btn {
+                padding: 10px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-play-circle"></i> Mutlu Player
+        </div>
+        <div class="nav-actions">
+            <div class="film-count">
+                <i class="fas fa-play-circle"></i> <span id="filmCount">0</span> Film
+            </div>
+            <button class="menu-btn" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+                <span>Kategoriler</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ===== SIDEBAR ===== -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-th-list"></i> Kategoriler</h2>
+            <button class="close-sidebar" onclick="toggleSidebar()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="sidebar-categories" id="categoryList">
+            <div class="sidebar-category active" onclick="filterCategory('Tümü', this)">
+                <i class="fas fa-fire"></i>
+                <span>Tüm Filmler</span>
+                <span class="badge" id="totalBadge">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MAIN ===== -->
+    <div class="main-content">
+        <div class="hero-section">
+            <h1><i class="fas fa-crown"></i> En İyi Filmler Burada</h1>
+            <p>Binlerce film arasından seç, tek tıkla izle. Tamamen ücretsiz!</p>
+            <div class="stats">
+                <div>
+                    <i class="fas fa-film"></i>
+                    <span id="statMovies">0</span> Film
+                </div>
+                <div>
+                    <i class="fas fa-tag"></i>
+                    <span id="statCategories">0</span> Kategori
+                </div>
+                <div>
+                    <i class="fas fa-clock"></i>
+                    <span id="statUpdated">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="category-title" id="currentCategory">
+            <i class="fas fa-fire"></i> Tüm Filmler
+        </div>
+
+        <div class="movie-grid" id="movieContainer">
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p>🎬 Filmler yükleniyor...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal" id="movieModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body" id="modalInfo">
+                <img id="modalPoster" class="modal-poster" src="" alt="Poster">
+                <div class="modal-details">
+                    <div class="modal-title" id="modalTitle">Film Adı</div>
+                    <div class="modal-category">
+                        <i class="fas fa-tag"></i>
+                        <span id="modalCategory">Kategori</span>
+                    </div>
+                    <div class="modal-desc" id="modalDesc">Açıklama burada olacak...</div>
+                    <button class="btn-play" id="playBtn">
+                        <i class="fas fa-play"></i> Hemen İzle
+                    </button>
+                </div>
+            </div>
+            <div class="player-wrapper" id="playerWrapper">
+                <iframe id="playerIframe" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allMovies = [];
+        let currentFilter = 'Tümü';
+
+        // ===== TOGGLE SIDEBAR =====
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        // ===== FETCH DATA =====
+        async function fetchMovies() {
+            try {
+                const response = await fetch('veritabani.json');
+                if (!response.ok) throw new Error('Veritabanına erişilemedi');
+                const data = await response.json();
+                allMovies = data.filmler || [];
+                const categories = data.kategoriler || [];
+
+                renderCategories(categories);
+                renderMovies(allMovies);
+                updateStats(categories);
+
+                document.getElementById('filmCount').textContent = allMovies.length;
+
+            } catch (error) {
+                console.error('❌ Hata:', error);
+                document.getElementById('movieContainer').innerHTML = `
+                    <div style="text-align:center; padding:60px 20px; color:#ff6b6b; grid-column:1/-1;">
+                        <i class="fas fa-exclamation-triangle" style="font-size:48px; margin-bottom:16px;"></i>
+                        <h3>Veritabanına bağlanılamadı</h3>
+                        <p style="color:#888; margin-top:8px;">${error.message}</p>
+                        <button onclick="fetchMovies()" style="margin-top:20px; padding:12px 30px; background:#e50914; border:none; border-radius:12px; color:#fff; font-weight:600; cursor:pointer;">
+                            <i class="fas fa-sync"></i> Tekrar Dene
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // ===== RENDER CATEGORIES =====
+        function renderCategories(categories) {
+            const list = document.getElementById('categoryList');
+            list.innerHTML = `
+                <div class="sidebar-category active" onclick="filterCategory('Tümü', this)">
+                    <i class="fas fa-fire"></i>
+                    <span>Tüm Filmler</span>
+                    <span class="badge" id="totalBadge">${allMovies.length}</span>
+                </div>
+            `;
+
+            categories.forEach(cat => {
+                const count = allMovies.filter(m => m.kategori === cat).length;
+                const div = document.createElement('div');
+                div.className = 'sidebar-category';
+                div.innerHTML = `
+                    <i class="fas fa-circle" style="font-size:8px; color:#e50914;"></i>
+                    <span>${cat}</span>
+                    <span class="badge">${count}</span>
+                `;
+                div.onclick = function() { filterCategory(cat, this); };
+                list.appendChild(div);
+            });
+        }
+
+        // ===== UPDATE STATS =====
+        function updateStats(categories) {
+            document.getElementById('statMovies').textContent = allMovies.length;
+            document.getElementById('statCategories').textContent = categories.length;
+            document.getElementById('statUpdated').textContent = new Date().toLocaleDateString('tr-TR');
+        }
+
+        // ===== FILTER CATEGORY =====
+        function filterCategory(category, element) {
+            currentFilter = category;
+
+            document.querySelectorAll('.sidebar-category').forEach(el => el.classList.remove('active'));
+            if (element) element.classList.add('active');
+
+            document.getElementById('currentCategory').innerHTML = `
+                <i class="fas fa-${category === 'Tümü' ? 'fire' : 'tag'}"></i> ${category}
+            `;
+
+            if (category === 'Tümü') {
+                renderMovies(allMovies);
+            } else {
+                renderMovies(allMovies.filter(m => m.kategori === category));
+            }
+
+            if (window.innerWidth <= 768) toggleSidebar();
+        }
+
+        // ===== RENDER MOVIES =====
+        function renderMovies(movies) {
+            const container = document.getElementById('movieContainer');
+
+            if (!movies || movies.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding:60px 20px; color:#666; grid-column:1/-1;">
+                        <i class="fas fa-inbox" style="font-size:48px; margin-bottom:16px;"></i>
+                        <h3>Bu kategoride film yok</h3>
+                        <p style="color:#444;">Daha sonra tekrar kontrol et</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = movies.map(movie => `
+                <div class="movie-card" onclick='openModal(${JSON.stringify(movie).replace(/'/g, "&#39;")})'>
+                    <div class="poster-wrapper">
+                        <img src="${movie.afis || 'https://via.placeholder.com/300x450/1a1a1a/666?text=No+Poster'}" 
+                             alt="${movie.baslik}" 
+                             loading="lazy"
+                             onerror="this.src='https://via.placeholder.com/300x450/1a1a1a/666?text=No+Poster'">
+                        <div class="play-overlay">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="movie-rating">
+                            <i class="fas fa-star"></i> HD
+                        </div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">${movie.baslik || 'İsimsiz Film'}</div>
+                        <div class="movie-category">
+                            <i class="fas fa-tag"></i> ${movie.kategori || 'Kategori Yok'}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ===== MODAL =====
+        function openModal(movie) {
+            const modal = document.getElementById('movieModal');
+            const info = document.getElementById('modalInfo');
+            const player = document.getElementById('playerWrapper');
+            const iframe = document.getElementById('playerIframe');
+
+            document.getElementById('modalPoster').src = movie.afis || 'https://via.placeholder.com/300x450/1a1a1a/666?text=No+Poster';
+            document.getElementById('modalTitle').textContent = movie.baslik || 'İsimsiz Film';
+            document.getElementById('modalCategory').textContent = movie.kategori || 'Kategori Yok';
+            document.getElementById('modalDesc').textContent = movie.aciklama || 'Bu film için açıklama bulunamadı.';
+
+            info.style.display = 'flex';
+            player.style.display = 'none';
+            iframe.src = '';
+
+            document.getElementById('playBtn').onclick = function() {
+                if (!movie.iframe) {
+                    alert('⚠️ Bu filmin izleme linki bulunamadı!');
+                    return;
+                }
+                info.style.display = 'none';
+                player.style.display = 'block';
+                iframe.src = movie.iframe;
+            };
+
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('movieModal').classList.remove('show');
+            document.getElementById('playerWrapper').style.display = 'none';
+            document.getElementById('playerIframe').src = '';
+            document.body.style.overflow = 'auto';
+        }
+
+        // ESC tuşu ile kapat
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Dışarı tıklayınca kapat
+        document.getElementById('movieModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ===== INIT =====
+        fetchMovies();
+    </script>
+
+</body>
+</html>
