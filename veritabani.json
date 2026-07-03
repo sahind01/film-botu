@@ -29,6 +29,14 @@
     ],
     "filmler": [
         {
+            "id": 284,
+            "baslik": "Kimin Kardeşi?",
+            "kategori": "Komedi Filmleri",
+            "afis": "https://img.fullhdfilmizlesene.life/poster/film/kimin-kardesi-little-brother-31067.jpg",
+            "aciklama": "Hayatını planlar, randevular ve düzgün görünmek üzerine kurmuş bir emlakçı, dışarıdan bakınca her şeyi kontrol altında tutuyor gibidir. İşinde başarılıdır, çevresine karşı mesafelidir ve en ufak aksilikte bile gerilmeye hazır bir hali vardır. Tam da kurduğu düzenin kusursuz işlediğini sandığı sırada, uzun süredir ortalarda olmayan kardeşi çıkagelir. Üstelik bu kardeş, iyi niyetli görünse de girdiği her ortamı karıştıran, tatlılığıyla insanı yumuşatıp davranışlarıyla sabrını sınayan biridir. Film, iki zıt karakterin aynı çatı altında çarpışmasını mizahla anlatırken, kontrollü bir hayatın aslında ne kadar kırılgan olabileceğini de hissettiriyor. Abartıya kaçmadan, küçük gerilimlerden komedi çıkaran bir hikâye.",
+            "iframe": "https://rapidvid.net/vod/v1x4ddc2a95"
+        },
+        {
             "id": 283,
             "baslik": "Boudica",
             "kategori": "Tarih Filmleri",
