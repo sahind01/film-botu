@@ -1,0 +1,116 @@
+name: İnatBox M3U Extractor
+
+on:
+  schedule:
+    # Her 6 saatte bir çalışır (UTC)
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    # Manuel çalıştırma için
+    inputs:
+      manual_run:
+        description: 'Manuel çalıştırma'
+        required: false
+        default: 'true'
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      actions: write
+      
+    steps:
+      - name: 📥 Kodu çek
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: 🐍 Python kurulumu
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          
+      - name: 📦 Bağımlılıkları yükle
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pycryptodome
+          
+      - name: 🔧 Gereksiz dosyaları temizle
+        run: |
+          # Eski playlist dosyalarını temizle
+          rm -f *.m3u
+          rm -f *.m3u8
+          
+      - name: 🚀 İnatBox çalıştır
+        run: |
+          python inatbox_extractor.py
+        continue-on-error: false
+        
+      - name: 📊 Sonuçları kontrol et
+        id: check_results
+        run: |
+          if [ -f "inatbox_playlist.m3u" ]; then
+            echo "✅ M3U dosyası oluşturuldu!"
+            echo "files_exist=true" >> $GITHUB_OUTPUT
+          else
+            echo "❌ M3U dosyası oluşturulamadı!"
+            echo "files_exist=false" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: 📝 M3U dosyasını düzenle
+        if: steps.check_results.outputs.files_exist == 'true'
+        run: |
+          # M3U dosyasını düzenle
+          sed -i '1i#EXTM3U' inatbox_playlist.m3u
+          sed -i '2i#EXTINF:-1 tvg-logo=\"\" group-title=\"İnatBox\", İnatBox Playlist' inatbox_playlist.m3u
+          
+          # Tarih bilgisi ekle
+          echo "# Playlist oluşturulma: $(date '+%Y-%m-%d %H:%M:%S') UTC" >> inatbox_playlist.m3u
+          
+      - name: 📤 Dosyaları GitHub'a gönder
+        if: steps.check_results.outputs.files_exist == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Eski dosyaları kaldır
+          git rm -f *.m3u 2>/dev/null || true
+          git rm -f *.m3u8 2>/dev/null || true
+          
+          # Yeni dosyaları ekle
+          git add *.m3u 2>/dev/null || true
+          
+          # Değişiklik varsa commit
+          if git diff --staged --quiet; then
+            echo "📝 Değişiklik yok, commit gerekmiyor"
+          else
+            git commit -m "🔄 M3U playlist güncellendi: $(date '+%Y-%m-%d %H:%M:%S')"
+            git push origin main
+            echo "✅ Dosyalar başarıyla gönderildi!"
+          fi
+          
+      - name: 📦 Artifact olarak kaydet
+        if: steps.check_results.outputs.files_exist == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: inatbox-playlist
+          path: |
+            *.m3u
+            *.m3u8
+          retention-days: 30
+          
+      - name: 📊 İstatistik göster
+        if: steps.check_results.outputs.files_exist == 'true'
+        run: |
+          echo "=== 📊 İstatistikler ==="
+          echo "M3U dosyası boyutu: $(du -h inatbox_playlist.m3u | cut -f1)"
+          echo "Link sayısı: $(grep -c '^http' inatbox_playlist.m3u || echo 0)"
+          echo "Kanal sayısı: $(grep -c '^#EXTINF' inatbox_playlist.m3u || echo 0)"
+          
+      - name: ⚠️ Hata durumunda bildirim
+        if: failure()
+        run: |
+          echo "❌ Hata oluştu! Logları kontrol edin."
+          echo "::error::İnatBox çalıştırılamadı veya hata oluştu!"
