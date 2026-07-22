@@ -6,7 +6,7 @@ import codecs
 from bs4 import BeautifulSoup
 from curl_cffi import requests
 
-BASE_URL = "https://www.fullhdfilmizlesene.life"
+BASE_URL = "https://www.fullhdfilmizlesene.nz"
 DB_FILE = "veritabani.json"
 
 # İstediğiniz Tüm Kategoriler
