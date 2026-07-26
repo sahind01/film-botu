@@ -29,6 +29,14 @@
     ],
     "filmler": [
         {
+            "id": 312,
+            "baslik": "Mutluyuz Mu?",
+            "kategori": "Yerli Filmler",
+            "afis": "https://img.fullhdfilmizlesene.cz/poster/film/mutluyuz-mu-74795.jpg",
+            "aciklama": "Boşanmış bir çift, kızlarının ısrarı üzerine kısa bir tatil boyunca hâlâ evliymiş gibi davranmayı kabul eder. Amaçları basittir: Çocuklarının moralini bozmamak ve birkaç günü sorunsuz atlatmak. Fakat aynı odaları, aynı sofraları ve eski aile düzenini paylaşmaya başlayınca işler bekledikleri kadar kolay gitmez. Küçük detaylar, yıllardır üstü kapatılan kırgınlıkları yeniden ortaya çıkarır. Film, eski eşlerin birbirine ne kadar değiştiklerini ya da aslında hiç değişmediklerini fark etmesini sade bir dille anlatıyor. Asıl mesele romantik bir barışmadan çok, ayrılıktan sonra da devam eden anne babalık sorumluluğu. Karakterler hatalarıyla, inatlarıyla ve iyi niyetleriyle gerçek duruyor; bu da hikâyeyi daha samimi kılıyor.",
+            "iframe": "https://rapidvid.net/vod/v1xdfb3f015"
+        },
+        {
             "id": 311,
             "baslik": "Ağır Çekimde Aşk",
             "kategori": "Komedi Filmleri",
