@@ -29,6 +29,14 @@
     ],
     "filmler": [
         {
+            "id": 328,
+            "baslik": "Son Hava Bükücü",
+            "kategori": "Blu Ray Filmler",
+            "afis": "https://img.fullhdfilmizlesene.mx/poster/film/fullhd-son-hava-bukucu-turkce-dublaj-izle-hd-720p.jpg",
+            "aciklama": "Hava, Su, Toprak ve Ateş ulusları, dengesi bozulduğunda bütün dünyayı sarsacak kadar birbirine bağlıdır. Ateş Ülkesi’nin diğer uluslara karşı acımasız bir savaş başlatmasıyla bu denge tamamen kırılır. Aradan tam yüz yıl geçmesine rağmen savaşın yarattığı yıkımı durdurabilecek bir umut neredeyse kalmamıştır. Nickelodeon’ın sevilen animasyon dizisinden uyarlanan bu film, Aang’ın hikâyesinin ilk bölümüne odaklanıyor. Henüz çok genç olmasına rağmen büyük bir sorumluluğun ortasında kalan Aang, hayatta kalmaya ve dünyada kaybolan dengeyi yeniden kurabilecek gücü anlamaya çalışır. Basit bir kahramanlık anlatısından çok, dört ulusun çatışması ve Aang’ın üstüne yüklenen kader üzerinden ilerleyen bir başlangıç filmi.",
+            "iframe": "https://rapidvid.net/vod/v1x67d270bc"
+        },
+        {
             "id": 327,
             "baslik": "Trolls 2 World Tour",
             "kategori": "Müzikal Filmler",
