@@ -29,6 +29,22 @@
     ],
     "filmler": [
         {
+            "id": 346,
+            "baslik": "Stan Lee",
+            "kategori": "Belgeseller",
+            "afis": "https://img.fullhdfilmizlesene.mx/poster/film/stan-lee-5870.jpg",
+            "aciklama": "Marvel Studios’un David Gelb yönetmenliğinde hazırladığı bu belgesel, Stan The Man Lee’nin yalnızca çizgi roman okurları için değil, popüler kültürün tamamı için neden bu kadar önemli bir figür haline geldiğini anlatıyor. Film, Stanley Lieber adıyla büyüdüğü yıllardan başlayarak, Marvel Comics’in yükselişinde üstlendiği role ve geride bıraktığı mirasa uzanıyor. Bunu yaparken dışarıdan uzun uzun yorumlar eklemek yerine, Lee’nin kişisel arşivlerinden ve kendi sözlerinden yararlanıyor. Böylece karşımıza, efsaneleşmiş bir ismin parlak başarılarının yanında, o başarıların arkasındaki çalışma hayatını da gösteren sade bir portre çıkıyor. Stan Lee’yi sevenler için tanıdık, merak edenler için ise iyi bir başlangıç niteliğinde.",
+            "iframe": "https://rapidvid.net/vod/v1x156e94d8"
+        },
+        {
+            "id": 345,
+            "baslik": "Liger",
+            "kategori": "Aksiyon Filmleri",
+            "afis": "https://img.fullhdfilmizlesene.mx/poster/film/liger-liger-59176.jpg",
+            "aciklama": "Liger, dövüş sanatlarıyla hayallerin ve kolay kolay kavuşamayan iki aşığın hikâyesini bir araya getiren bir film. Merkezde, kendini MMA dünyasında kanıtlamaya çalışan Liger var. Onun için antrenman sadece güçlenmek değil, zihninde büyüttüğü hedefe biraz daha yaklaşmak anlamına geliyor. Basamakları tek tek çıkarken aklında hep aynı isim duruyor: dünya çapında tanınan MMA dövüşçüsü Mark Anderson. Liger, onun gibi dövüşebilmek ve bir gün onun dikkatini çekebilmek için kendini zorluyor. Film, bu sert spor dünyasının içinde hırsı, idolüne duyulan hayranlığı ve aşkın getirdiği kırılgan tarafı birlikte ele alıyor.",
+            "iframe": "https://rapidvid.net/vod/v1xdbd18ae8"
+        },
+        {
             "id": 344,
             "baslik": "Kurtuluş Projesi",
             "kategori": "Bilim Kurgu Filmleri",
